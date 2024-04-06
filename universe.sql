@@ -88,7 +88,8 @@ CREATE TABLE public.moon (
     moon_id integer NOT NULL,
     name character varying(30) NOT NULL,
     diameter_km numeric(6,2),
-    planet_id integer
+    planet_id integer,
+    contains_water boolean
 );
 
 
@@ -154,6 +155,44 @@ ALTER SEQUENCE public.planet_planet_id_seq OWNED BY public.planet.planet_id;
 
 
 --
+-- Name: satellite; Type: TABLE; Schema: public; Owner: freecodecamp
+--
+
+CREATE TABLE public.satellite (
+    satellite_id integer NOT NULL,
+    is_active boolean,
+    agency character varying(30),
+    planet_id integer,
+    name character varying(30) NOT NULL,
+    launch_year integer
+);
+
+
+ALTER TABLE public.satellite OWNER TO freecodecamp;
+
+--
+-- Name: satellite_satellite_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.satellite_satellite_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.satellite_satellite_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: satellite_satellite_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.satellite_satellite_id_seq OWNED BY public.satellite.satellite_id;
+
+
+--
 -- Name: star; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
@@ -192,39 +231,6 @@ ALTER SEQUENCE public.star_star_id_seq OWNED BY public.star.star_id;
 
 
 --
--- Name: universe_data; Type: TABLE; Schema: public; Owner: freecodecamp
---
-
-CREATE TABLE public.universe_data (
-    data_id integer NOT NULL
-);
-
-
-ALTER TABLE public.universe_data OWNER TO freecodecamp;
-
---
--- Name: universe_data_data_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
---
-
-CREATE SEQUENCE public.universe_data_data_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.universe_data_data_id_seq OWNER TO freecodecamp;
-
---
--- Name: universe_data_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
---
-
-ALTER SEQUENCE public.universe_data_data_id_seq OWNED BY public.universe_data.data_id;
-
-
---
 -- Name: galaxy galaxy_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -246,17 +252,17 @@ ALTER TABLE ONLY public.planet ALTER COLUMN planet_id SET DEFAULT nextval('publi
 
 
 --
+-- Name: satellite satellite_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.satellite ALTER COLUMN satellite_id SET DEFAULT nextval('public.satellite_satellite_id_seq'::regclass);
+
+
+--
 -- Name: star star_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.star_star_id_seq'::regclass);
-
-
---
--- Name: universe_data data_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.universe_data ALTER COLUMN data_id SET DEFAULT nextval('public.universe_data_data_id_seq'::regclass);
 
 
 --
@@ -266,61 +272,64 @@ ALTER TABLE ONLY public.universe_data ALTER COLUMN data_id SET DEFAULT nextval('
 INSERT INTO public.galaxy VALUES (1, 'Milky Way', 170, 'Barred Spiral', NULL);
 INSERT INTO public.galaxy VALUES (2, 'Andromeda', 152, 'Spiral', 2.50);
 INSERT INTO public.galaxy VALUES (3, 'Centaurus A', 60, 'Lenticular', 13.00);
+INSERT INTO public.galaxy VALUES (4, 'NGC 4622', NULL, 'Unbarred Spiral', 200.00);
+INSERT INTO public.galaxy VALUES (5, 'Black Eye Galaxy', 70, 'spiral galaxy', 17.30);
+INSERT INTO public.galaxy VALUES (6, 'Messier 81', 90, 'spiral galaxy', 12.00);
 
 
 --
 -- Data for Name: moon; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.moon VALUES (1, 'Moon', 3476.28, 3);
-INSERT INTO public.moon VALUES (2, 'Phobos', 22.16, 4);
-INSERT INTO public.moon VALUES (3, 'Deimos', 12.54, 4);
-INSERT INTO public.moon VALUES (4, 'Metis', 43.00, 5);
-INSERT INTO public.moon VALUES (5, 'Adrastea', 16.40, 5);
-INSERT INTO public.moon VALUES (6, 'Amalthea', 167.00, 5);
-INSERT INTO public.moon VALUES (7, 'Thebe', 98.60, 5);
-INSERT INTO public.moon VALUES (8, 'Io', 3643.20, 5);
-INSERT INTO public.moon VALUES (9, 'Europa', 3121.60, 5);
-INSERT INTO public.moon VALUES (10, 'Ganymede', 5268.20, 5);
-INSERT INTO public.moon VALUES (11, 'Callisto', 4820.60, 5);
-INSERT INTO public.moon VALUES (12, 'Themisto', 9.00, 5);
-INSERT INTO public.moon VALUES (13, 'Leda', 21.50, 5);
-INSERT INTO public.moon VALUES (14, 'Ersa', 3.00, 5);
-INSERT INTO public.moon VALUES (15, 'Pan', 27.40, 6);
-INSERT INTO public.moon VALUES (16, 'Daphnis', 7.80, 6);
-INSERT INTO public.moon VALUES (17, 'Atlas', 29.80, 6);
-INSERT INTO public.moon VALUES (18, 'Prometheus', 85.60, 6);
-INSERT INTO public.moon VALUES (19, 'Pandora', 80.00, 6);
-INSERT INTO public.moon VALUES (20, 'Epimetheus', 117.20, 6);
-INSERT INTO public.moon VALUES (21, 'Janus', 178.00, 6);
-INSERT INTO public.moon VALUES (22, 'Aegaeon', 0.66, 6);
-INSERT INTO public.moon VALUES (23, 'Mimas', 386.40, 6);
-INSERT INTO public.moon VALUES (24, 'Methone', 2.90, 6);
-INSERT INTO public.moon VALUES (25, 'Cordelia', 40.00, 7);
-INSERT INTO public.moon VALUES (26, 'Ophelia', 43.00, 7);
-INSERT INTO public.moon VALUES (27, 'Bianca', 51.00, 7);
-INSERT INTO public.moon VALUES (28, 'Cressida', 80.00, 7);
-INSERT INTO public.moon VALUES (29, 'Desdemona', 64.00, 7);
-INSERT INTO public.moon VALUES (30, 'Juliet', 94.00, 7);
-INSERT INTO public.moon VALUES (31, 'Portia', 135.00, 7);
-INSERT INTO public.moon VALUES (32, 'Rosalind', 72.00, 7);
-INSERT INTO public.moon VALUES (33, 'Cupid', 18.00, 7);
-INSERT INTO public.moon VALUES (34, 'Belinda', 90.00, 7);
-INSERT INTO public.moon VALUES (35, 'Naiad', 60.40, 8);
-INSERT INTO public.moon VALUES (36, 'Thalassa', 81.40, 8);
-INSERT INTO public.moon VALUES (37, 'Despina', 156.00, 8);
-INSERT INTO public.moon VALUES (38, 'Galatea', 174.80, 8);
-INSERT INTO public.moon VALUES (39, 'Larissa', 194.00, 8);
-INSERT INTO public.moon VALUES (40, 'Hippocamp', 34.80, 8);
-INSERT INTO public.moon VALUES (41, 'Proteus', 420.00, 8);
-INSERT INTO public.moon VALUES (42, 'Triton', 2705.20, 8);
-INSERT INTO public.moon VALUES (43, 'Nereid', 357.00, 8);
-INSERT INTO public.moon VALUES (44, 'Halimede', 62.00, 8);
-INSERT INTO public.moon VALUES (45, 'Charon', 1212.00, 9);
-INSERT INTO public.moon VALUES (46, 'Styx', NULL, 9);
-INSERT INTO public.moon VALUES (47, 'Nix', NULL, 9);
-INSERT INTO public.moon VALUES (48, 'Kerberos', NULL, 9);
-INSERT INTO public.moon VALUES (49, 'Hydra', NULL, 9);
+INSERT INTO public.moon VALUES (1, 'Moon', 3476.28, 3, NULL);
+INSERT INTO public.moon VALUES (2, 'Phobos', 22.16, 4, NULL);
+INSERT INTO public.moon VALUES (3, 'Deimos', 12.54, 4, NULL);
+INSERT INTO public.moon VALUES (4, 'Metis', 43.00, 5, NULL);
+INSERT INTO public.moon VALUES (5, 'Adrastea', 16.40, 5, NULL);
+INSERT INTO public.moon VALUES (6, 'Amalthea', 167.00, 5, NULL);
+INSERT INTO public.moon VALUES (7, 'Thebe', 98.60, 5, NULL);
+INSERT INTO public.moon VALUES (8, 'Io', 3643.20, 5, NULL);
+INSERT INTO public.moon VALUES (9, 'Europa', 3121.60, 5, NULL);
+INSERT INTO public.moon VALUES (10, 'Ganymede', 5268.20, 5, NULL);
+INSERT INTO public.moon VALUES (11, 'Callisto', 4820.60, 5, NULL);
+INSERT INTO public.moon VALUES (12, 'Themisto', 9.00, 5, NULL);
+INSERT INTO public.moon VALUES (13, 'Leda', 21.50, 5, NULL);
+INSERT INTO public.moon VALUES (14, 'Ersa', 3.00, 5, NULL);
+INSERT INTO public.moon VALUES (15, 'Pan', 27.40, 6, NULL);
+INSERT INTO public.moon VALUES (16, 'Daphnis', 7.80, 6, NULL);
+INSERT INTO public.moon VALUES (17, 'Atlas', 29.80, 6, NULL);
+INSERT INTO public.moon VALUES (18, 'Prometheus', 85.60, 6, NULL);
+INSERT INTO public.moon VALUES (19, 'Pandora', 80.00, 6, NULL);
+INSERT INTO public.moon VALUES (20, 'Epimetheus', 117.20, 6, NULL);
+INSERT INTO public.moon VALUES (21, 'Janus', 178.00, 6, NULL);
+INSERT INTO public.moon VALUES (22, 'Aegaeon', 0.66, 6, NULL);
+INSERT INTO public.moon VALUES (23, 'Mimas', 386.40, 6, NULL);
+INSERT INTO public.moon VALUES (24, 'Methone', 2.90, 6, NULL);
+INSERT INTO public.moon VALUES (25, 'Cordelia', 40.00, 7, NULL);
+INSERT INTO public.moon VALUES (26, 'Ophelia', 43.00, 7, NULL);
+INSERT INTO public.moon VALUES (27, 'Bianca', 51.00, 7, NULL);
+INSERT INTO public.moon VALUES (28, 'Cressida', 80.00, 7, NULL);
+INSERT INTO public.moon VALUES (29, 'Desdemona', 64.00, 7, NULL);
+INSERT INTO public.moon VALUES (30, 'Juliet', 94.00, 7, NULL);
+INSERT INTO public.moon VALUES (31, 'Portia', 135.00, 7, NULL);
+INSERT INTO public.moon VALUES (32, 'Rosalind', 72.00, 7, NULL);
+INSERT INTO public.moon VALUES (33, 'Cupid', 18.00, 7, NULL);
+INSERT INTO public.moon VALUES (34, 'Belinda', 90.00, 7, NULL);
+INSERT INTO public.moon VALUES (35, 'Naiad', 60.40, 8, NULL);
+INSERT INTO public.moon VALUES (36, 'Thalassa', 81.40, 8, NULL);
+INSERT INTO public.moon VALUES (37, 'Despina', 156.00, 8, NULL);
+INSERT INTO public.moon VALUES (38, 'Galatea', 174.80, 8, NULL);
+INSERT INTO public.moon VALUES (39, 'Larissa', 194.00, 8, NULL);
+INSERT INTO public.moon VALUES (40, 'Hippocamp', 34.80, 8, NULL);
+INSERT INTO public.moon VALUES (41, 'Proteus', 420.00, 8, NULL);
+INSERT INTO public.moon VALUES (42, 'Triton', 2705.20, 8, NULL);
+INSERT INTO public.moon VALUES (43, 'Nereid', 357.00, 8, NULL);
+INSERT INTO public.moon VALUES (44, 'Halimede', 62.00, 8, NULL);
+INSERT INTO public.moon VALUES (45, 'Charon', 1212.00, 9, NULL);
+INSERT INTO public.moon VALUES (46, 'Styx', NULL, 9, NULL);
+INSERT INTO public.moon VALUES (47, 'Nix', NULL, 9, NULL);
+INSERT INTO public.moon VALUES (48, 'Kerberos', NULL, 9, NULL);
+INSERT INTO public.moon VALUES (49, 'Hydra', NULL, 9, NULL);
 
 
 --
@@ -353,25 +362,46 @@ INSERT INTO public.planet VALUES (8, 'Neptune', 3.83, 1, true);
 
 
 --
+-- Data for Name: satellite; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+--
+
+INSERT INTO public.satellite VALUES (1, true, 'NASA', 3, 'Aura', 2004);
+INSERT INTO public.satellite VALUES (3, true, 'MBRSC', 3, 'DubaiSat-1 and 2', 2009);
+INSERT INTO public.satellite VALUES (2, true, 'CNSA', 3, 'CBERS-4', 2014);
+INSERT INTO public.satellite VALUES (4, true, 'NSPO', 3, 'Formosat-5', 2017);
+INSERT INTO public.satellite VALUES (5, true, 'NASA Roscosmos JAXA ESA CSA', 3, 'ISS', 1998);
+INSERT INTO public.satellite VALUES (6, true, 'NASA and USGS', 3, 'Landsat-9', 2021);
+INSERT INTO public.satellite VALUES (7, false, 'NASA', 1, 'MESSENGER', 2004);
+INSERT INTO public.satellite VALUES (9, true, 'JAXA', 2, 'Akatsuki', 2010);
+INSERT INTO public.satellite VALUES (10, false, 'Lavochkin', 4, 'Mars 2', 1971);
+INSERT INTO public.satellite VALUES (11, false, 'Lavochkin', 4, 'Mars 3', 1971);
+INSERT INTO public.satellite VALUES (12, false, 'NASA', 4, 'Viking 1', 1975);
+INSERT INTO public.satellite VALUES (13, false, 'NASA', 4, 'Viking 2', 1976);
+INSERT INTO public.satellite VALUES (14, true, 'NASA', 4, '2001 Mars Odyssey', 2001);
+INSERT INTO public.satellite VALUES (15, true, 'ESA', 4, 'Mars Express', 2003);
+INSERT INTO public.satellite VALUES (16, true, 'USESA', 4, 'Emirates Mars Mission', 2021);
+INSERT INTO public.satellite VALUES (17, true, 'CNSA', 4, 'Tianwen 1', 2021);
+INSERT INTO public.satellite VALUES (18, true, 'NASA', 5, 'JUNO', 2011);
+INSERT INTO public.satellite VALUES (20, false, 'NASA / JPL ESA / ASI', 6, 'Cassini–Huygens', 2004);
+
+
+--
 -- Data for Name: star; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
 INSERT INTO public.star VALUES (1, 'Sun', 'Yellow Dwarf Star', NULL, 1, true);
 INSERT INTO public.star VALUES (3, 'Kepler-90', 'F-type', 2790, 1, true);
 INSERT INTO public.star VALUES (2, 'TRAPPIST-1', 'Cool Red Dwarf', 40, 1, true);
-
-
---
--- Data for Name: universe_data; Type: TABLE DATA; Schema: public; Owner: freecodecamp
---
-
+INSERT INTO public.star VALUES (4, 'α Centauri C', 'Red dwarf', 4, 1, true);
+INSERT INTO public.star VALUES (5, 'Barnards Star', 'Small Red Dwarf', 6, 1, false);
+INSERT INTO public.star VALUES (6, 'Wolf 359', 'Red Dwarf', 8, 1, true);
 
 
 --
 -- Name: galaxy_galaxy_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.galaxy_galaxy_id_seq', 3, true);
+SELECT pg_catalog.setval('public.galaxy_galaxy_id_seq', 6, true);
 
 
 --
@@ -389,17 +419,25 @@ SELECT pg_catalog.setval('public.planet_planet_id_seq', 23, true);
 
 
 --
+-- Name: satellite_satellite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.satellite_satellite_id_seq', 20, true);
+
+
+--
 -- Name: star_star_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.star_star_id_seq', 3, true);
+SELECT pg_catalog.setval('public.star_star_id_seq', 6, true);
 
 
 --
--- Name: universe_data_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+-- Name: galaxy galaxy_galaxy_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.universe_data_data_id_seq', 1, false);
+ALTER TABLE ONLY public.galaxy
+    ADD CONSTRAINT galaxy_galaxy_id_key UNIQUE (galaxy_id);
 
 
 --
@@ -408,6 +446,14 @@ SELECT pg_catalog.setval('public.universe_data_data_id_seq', 1, false);
 
 ALTER TABLE ONLY public.galaxy
     ADD CONSTRAINT galaxy_pkey PRIMARY KEY (galaxy_id);
+
+
+--
+-- Name: moon moon_moon_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.moon
+    ADD CONSTRAINT moon_moon_id_key UNIQUE (moon_id);
 
 
 --
@@ -427,6 +473,30 @@ ALTER TABLE ONLY public.planet
 
 
 --
+-- Name: planet planet_planet_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.planet
+    ADD CONSTRAINT planet_planet_id_key UNIQUE (planet_id);
+
+
+--
+-- Name: satellite satellite_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.satellite
+    ADD CONSTRAINT satellite_pkey PRIMARY KEY (satellite_id);
+
+
+--
+-- Name: satellite satellite_satellite_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.satellite
+    ADD CONSTRAINT satellite_satellite_id_key UNIQUE (satellite_id);
+
+
+--
 -- Name: star star_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
@@ -435,11 +505,11 @@ ALTER TABLE ONLY public.star
 
 
 --
--- Name: universe_data universe_data_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+-- Name: star star_star_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
-ALTER TABLE ONLY public.universe_data
-    ADD CONSTRAINT universe_data_pkey PRIMARY KEY (data_id);
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT star_star_id_key UNIQUE (star_id);
 
 
 --
@@ -456,6 +526,14 @@ ALTER TABLE ONLY public.moon
 
 ALTER TABLE ONLY public.planet
     ADD CONSTRAINT planet_star_id_fkey FOREIGN KEY (star_id) REFERENCES public.star(star_id);
+
+
+--
+-- Name: satellite satellite_planet_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.satellite
+    ADD CONSTRAINT satellite_planet_id_fkey FOREIGN KEY (planet_id) REFERENCES public.planet(planet_id);
 
 
 --
